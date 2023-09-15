@@ -1,0 +1,51 @@
+
+{% extends 'main/layout2.html' %}
+{% block title %}Isciler{% endblock %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper">
+<div class="row ">
+    <div class="col-lg grid-margin">
+      <div class="card">
+        <div class="card-body">
+
+<h3>Isciler</h3>
+
+   
+</div>
+</div>
+</div>
+</div>
+
+
+{% if deletest %}
+<form method="post" action="deletestaff/{{ deletest.id }}">
+    {% csrf_token %}
+
+    <div class="alert alert-info "><b>Silmek istediyinizden eminsinizmi ?</b>
+    <button class="btn btn-success btn-sm" type="submit"><i class="bi bi-check"></i></button>
+    <a class="btn btn-danger btn-sm" href="http://127.0.0.1:8000/staff"><i class="bi bi-x"></i></a>
+    </div>
+
+</form>
+{% endif%}
+
+
+<div class="row ">
+    <div class="col-lg grid-margin">
+      <div class="card">
+        <div class="card-body">
+
+            <div id="result"></div>
+   
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+</div>
+</div>
+
+{% endblock  %}

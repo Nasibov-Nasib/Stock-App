@@ -1,0 +1,51 @@
+{% extends 'main/layout2.html' %}
+<!-- {% block title %}Clients{% endblock %} -->
+{% block axtar %}{% url 'axtarclient' %}{% endblock %}
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper">
+    <div class="row ">
+      <div class="col-lg grid-margin">
+        <div class="card">
+          <div class="card-body">
+           
+<!-- 
+                {% if uploaded_file_url %}
+                    {{uploaded_file_url}}
+
+                {% endif %} -->
+
+       
+   </div> 
+      </div>  
+        </div>
+          </div>      
+    {% if clyoxla %}
+        <form method="POST" action="http://127.0.0.1:8000/clients/deleteconfirmclient/deleteclient/{{ clyoxla.id }}">
+        {% csrf_token %}
+
+            <div class="alert alert-info "><b>Silmek istediyinizden eminsinizmi ?</b>
+            <button class="btn btn-success btn-sm" type="submit"><i class="bi bi-check"></i></button>
+            <a class="btn btn-danger btn-sm" href="http://127.0.0.1:8000/clients"><i class="bi bi-trash"></i></a>
+            </div>
+        </form>
+    
+    {% endif %}
+    <div class="row ">
+        <div class="col-lg grid-margin">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+    
+
+            <div id="result"></div>
+
+</div>
+    </div>
+       </div>   
+        </div>
+           </div> 
+</div>
+    </div>
+{% endblock %}
+   

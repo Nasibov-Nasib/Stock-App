@@ -1,0 +1,1228 @@
+
+
+{% if section == 'brands' %}
+
+    <br>
+                            
+    {% if edit %}
+
+    <form action="http://127.0.0.1:8000/edit/update/{{ edit.id }}" method="POST" enctype="multipart/form-data" id="all_update">
+        {% csrf_token %}
+        <label for="">Brand</label>
+        <input style="color: white;" type="text" name="brand" placeholder="Brand" class="form-control" size="3" value="{{ edit.Brand }}">
+        <label for="">Foto</label>
+        <br>
+        <img style="width:90px; height:70px;" src="{{ edit.Foto }}"><br><br>
+        <div class="custom-file">
+        <input type="hidden" name="cari_foto" value="{{ edit.Foto }}">
+        <input type="file" name="foto" class="custom-file-input" value="{{ edit.Foto }}" id="inputGroupFile01">
+        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        </div>
+        <br><br>
+        <input type="hidden" name="id" value="{{ edit.id }}">
+        <input type="hidden" name="all_update">
+
+        <button type="button" class="btn btn-success btn-sm update"  >Yenile</button>
+        <a href="{% url 'index' %}"><button class="btn btn-danger btn-sm" type="button">İmtina</button></a>
+    </form>
+
+    {% else %}
+
+        <form action="addbrand/" method="POST" enctype="multipart/form-data" id="brand_insert">
+            {% csrf_token %}
+            <label for="">Brand</label>
+            <input type="text" name="brand" placeholder="Brand" class="form-control" size="3">
+            <label for="">Foto</label>
+            <div class="custom-file">
+            <input type="file" name="foto" class="custom-file-input" id="inputGroupFile01">
+            <label class="custom-file-label" for="inputGroupFile01">Faylı Seçin</label>
+            </div>
+            <br><br>
+            <input type="hidden" name="brand_insert">
+            <button type="button" class="btn btn-success btn-sm insert" >Daxil et</button>
+
+        </form>
+        
+
+    {% endif %}
+    <br>
+
+    <div id="ajax_message">
+        {% if messages%}
+                {% for message in messages %}
+                <div class="alert alert-info  " role="alert"> {{ message }}</div>
+                {% endfor %}
+        {% endif %}
+        <div class="alert alert-info">Bazada <b>{{bsay}}</b> brend var</div>
+    </div>
+        <br>
+        <form method="post" action="{% url 'index' %}" id="secsil">
+    {% csrf_token %}
+ <div class="table-responsive">
+    <table class="table table-hover" id="cedvel">
+        <thead>
+          <tr>
+            <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+            <th>#</th>
+            <th> Brend
+                {% if filter1 == 'az' %}
+                <button class="btn btn-link btn-sm f1" id="az"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z"/>
+                <path d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z"/>
+              </svg></button>
+              {% else %}
+              <button class="btn btn-link btn-sm f1" id="za"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down-alt" viewBox="0 0 16 16">
+                <path d="M12.96 7H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V7z"/>
+                <path fill-rule="evenodd" d="M10.082 12.629 9.664 14H8.598l1.789-5.332h1.234L13.402 14h-1.12l-.419-1.371h-1.781zm1.57-.785L11 9.688h-.047l-.652 2.156h1.351z"/>
+                <path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z"/>
+              </svg></button>
+              {% endif %}
+            
+            
+            </th>
+            <th> Foto </th>
+            <th> Tarix </th>
+            <th>  </th>
+            
+          </tr>
+        </thead>
+        
+        <tbody class="tbody-dark">
+          {% for x in brands %}
+          <tr>
+              <td>{{ forloop.counter}}</td>
+                <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+              
+              <td>{{ x.Brand }}</td>
+              <td><img style="width:90px; height:70px;" src="{{ x.Foto }}"></td>
+              <td>{{ x.Tarix }}</td>
+              <td> 
+               
+                  <button type="button" class="btn btn-warning btn-sm edit" id="{{ x.id }}"><i class="mdi mdi-grease-pencil"></i></button>
+                
+                  <button type="button" class="btn btn-danger btn-sm sil" id="{{ x.id }}"><i class="mdi mdi-delete"></i></button>   
+                    
+              </td>
+
+          </tr>
+        
+      </tbody>
+      {% endfor %}
+      </table>
+      </form>
+      </div>
+
+      {% endif %}
+
+
+<!------------------------------------------------------------------------------->
+
+    {% if section == 'mehsuls' %}
+
+    {% if editmehsul %} 
+
+ <h1 class="alert alert-info">Redakte edin</h1>
+        
+    <form action="{% url 'updaterecordmehsul' editmehsul.id %}" method="post" enctype="multipart/form-data" id="all_update">
+    {% csrf_token %}
+    <label for=""><h3>Brend</h3></label>
+    <select name="brand" class="form-control" >
+        <option value="">Brendi secin</option>
+
+        {% for brands in my_brands %}
+        
+            {% if editmehsul.Brand_id == brands.Brand %}
+                <option selected  value="{{brands.id}}">{{brands.Brand}}</option>
+            {% else %}
+                <option value="{{brands.id}}">{{brands.Brand}}</option>
+            {% endif %}
+
+        {% endfor %}
+    </select>
+    <br>
+    <label for=""><h3>Ad</h3></label>
+    <input type="text" placeholder="Yeni Ad" class="form-control" name="ad" value="{{ editmehsul.Ad }}">
+    <br>
+    <div class="custom-file">
+    <input  placeholder='Yeni Foto' type="file" name="foto" class="custom-file-input"  value = "{{ editmehsul.Foto }}" id="inputGroupFile01">
+    <label class="custom-file-label" for="inputGroupFile01">Fayl Seçin</label> </div>
+    <input type="hidden" name="cari_mehsul" value="{{ editmehsul.Foto }}">
+    <br>
+    <label for=""><h3>Alish</h3></label>
+    <input  placeholder="Yeni Telefon" class="form-control" name="alish" value="{{ editmehsul.Alish }}">
+    <br>
+    <label for=""><h3>Satish</3></label>
+    <input  placeholder="Yeni Satish" class="form-control" name="satish" value="{{ editmehsul.Satish }}">
+    <br>
+    <label for=""><h3>Miqdar</h3></label>
+    <input  placeholder="Yeni Miqdar" class="form-control" name="miqdar" value="{{ editmehsul.Miqdar }}">
+    <br>
+    <input type="hidden" name="id" value="{{ editmehsul.id }}">
+    <input type="hidden" name="mehsulupdate">
+    
+    <button  class= 'btn btn-primary btn-md update' type="button" >Yenile</button>
+    <a class="btn btn-danger btn-md"  href="/mehsul">Imtina</a>
+    </form>
+    <!--</div>-->
+    <!--</div>-->
+{% else %}
+       <h2> Mehsul elave edin</h2>
+        <form action="addmehsul/" method="POST" enctype="multipart/form-data" id="brand_insert">
+            {% csrf_token %}
+            
+            <label for="">Brand</label>
+            <select name="brand" class="form-control">
+                <option value="">Brendi secin</option>
+                {% for brands in my_brands %}
+                    <option value="{{brands.id}}">{{brands.Brand}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="">Ad</label>
+            <input type="text" name="ad" placeholder="Məhsulun adı" class="form-control" size="3">
+            <label for="">Foto</label>
+            <div class="custom-file">
+            <input type="file" name="foto" class="custom-file-input" id="inputGroupFile01">
+            <label class="custom-file-label" for="inputGroupFile01">Fayl Seçin</label>
+            <br>
+            <label for="">Alish</label>
+            <input type="text" name="alish" placeholder="Alış" class="form-control" size="3">
+            <br>
+            <label for="">Satish</label>
+            <input type="text" name="satish" placeholder="Satış" class="form-control" size="3">
+            <br>
+            <label for="">Miqdar</label>
+            <input type="text" name="miqdar" placeholder="Miqdar" class="form-control" size="3">
+            <br>
+            <input type="hidden" name="mehsulinsert">
+            
+            <button type="button" class="btn btn-success btn-md insert" >Daxil et</button>
+   
+        </form>
+    
+    {% endif %}
+
+    <br><br>
+    <div id="ajax_message">
+        {% if messages%}
+                {% for message in messages %}
+                <div class="alert alert-info  " role="alert"> {{ message }}</div>
+                {% endfor %}
+        {% endif %}
+        <div class="alert alert-info">Bazada <b>{{bsay}}</b> mehsul var</div>
+    </div>
+    <br>
+ <form method="post" action="{% url 'mehsul' %}" id="secsil">
+    {% csrf_token %}
+ <div class="table-responsive">
+    <table class="table table-hover" id="cedvel">
+      <thead >
+        <tr>
+          
+        <th>#</th>
+         <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Brend</th>
+        <th>Ad</th>
+        <th>Foto</th>
+        <th>Alish</th>
+        <th>Satish</th>
+        <th>Miqdar</th>
+        <th>Qazanc</th>
+        <th></th>
+    </tr>
+      </thead>
+
+
+    <tbody class="tbody-dark">
+    {% for x in mehsul %}
+    <tr>
+        <td>{{ forloop.counter}}</td>
+        <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+        <td>{{ x.Brand_id.Brand }}</td>
+        <td>{{ x.Ad }}</td>
+        <td><img style="width:90px; height:70px;" src="{{ x.Foto }}"></td>
+        <td>{{ x.Alish }}</td>
+        <td>{{ x.Satish }}</td>
+        <td>{{ x.Miqdar }}</td>
+        <td>{{ x.cem}}</td>
+        <td> 
+            
+            <button type="button" class="btn btn-warning btn-sm edit" id="{{ x.id }} "><i class="mdi mdi-grease-pencil"></i></button>
+
+            <button type="button" class="btn btn-danger btn-sm sil" id="{{ x.id }}"><i class="mdi mdi-delete"></i> </button>
+            
+        </td>
+
+    </tr>
+
+    </tbody>
+    {% endfor %}
+
+    </table>
+    </form>
+</div>
+{% endif %}
+
+<!------------------------------------------------------------------------------->
+
+  {% if section == 'clients' %}
+
+  {% if editklient %}
+  <h1 class="alert alert-info">Redakte edin</h1>
+  <form action="updaterecordclients/{{ editklient.id }}" method="post" enctype="multipart/form-data" id="all_update">
+  {% csrf_token %}
+  <label for=""><h3>Ad</h3></label>
+  <input  placeholder="Yeni Ad" class="form-control" name="ad" value="{{ editklient.Ad}}">
+  <br>
+  <label for=""><h3>Soyad</h3></label>
+  <input  placeholder="Yeni Soyad" class="form-control" name="soyad" value="{{ editklient.Soyad }}">
+  <br>
+  <label for=""><h3>Telefon</h3></label>
+  <input  placeholder="Yeni Telefon" class="form-control" name="tel" value="{{ editklient.Tel }}">
+  <br>
+  <div class="custom-file">
+  <input type="file" name="foto" class="custom-file-input"  value = "{{ editklient.Foto }}" id="inputGroupFile01">
+  <label class="custom-file-label" for="inputGroupFile01">Choose file</label> </div>
+  <input type="hidden" name="cari_foto" value="{{ editklient.Foto }}">
+  <br>
+  <label for=""><h3>Email</3></label>
+  <input  placeholder="Yeni Email" class="form-control" name="email" value="{{ editklient.Email }}">
+  <br>
+  <label for=""><h3>Sirket</h3></label>
+  <input  placeholder="Yeni Sirket" class="form-control" name="sirket" value="{{ editklient.Sirket }}">
+  <br>
+  <input type="hidden" name="id" value="{{ editklient.id }}">
+    <input type="hidden" name="clupdate">
+  <button  class= 'btn btn-primary btn-md update' type="button" >Yenile</button>
+  </div>
+  </form>
+
+  {% else %}
+
+      <h2> Klienti daxil edin</h2> 
+  
+      <form action="{% url 'addclient' %}" method="POST" enctype="multipart/form-data" id="brand_insert">
+          {% csrf_token %}
+          
+          <label for="">Ad</label>
+          <input type="text" name="ad" placeholder="ad" class="form-control" size="5">
+          <br> 
+          <label for="">Soyad</label>
+          <input type="text" name='soyad' placeholder="soyad" class="form-control" size="15">
+          <br>
+          <label for="">Telefon</label>
+          <input type="text" name='tel' placeholder="tel" class="form-control" size="15">
+          <br>
+          <label for="">Foto</label>
+          
+          <div class="custom-file">
+          <input type="file" name="foto" class="custom-file-input" >
+          <label class="custom-file-label" for="">Choose file</label>
+          </div>
+          <br>
+          <label for="">Email</label>
+          <input type="email" name='email' placeholder="email" class="form-control" size="15">
+          <br>
+          <label for="">Sirket</label>
+          <input type="text" name='sirket' placeholder="sirket" class="form-control" size="15">
+          <input type="hidden" name="clinsert">
+          <br><br>
+      
+          <button type="button" class="btn btn-success btn-md insert" >Daxil et</button>
+          </form>
+      {% endif %} 
+<br>
+      <div id="ajax_message">
+        {% if messages%}
+                {% for message in messages %}
+                <div class="alert alert-info  " role="alert"> {{ message }}</div>
+                {% endfor %}
+        {% endif %}
+        <div class="alert alert-info">Bazada <b>{{bsay}}</b> klient var</div>
+    </div>
+<br>
+<form method="post" action="{% url 'clients' %}" id="secsil">
+            {% csrf_token %}
+ <div class="table-responsive">
+  <table class="table table-hover" id="cedvel">
+    <thead >
+        <tr>
+       
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Ad
+            {% if filter1 == 'az' %}
+            <button class="btn btn-link btn-sm f1" id="az"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z"/>
+            <path d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z"/>
+          </svg></button>
+          {% else %}
+          <button class="btn btn-link btn-sm f1" id="za"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down-alt" viewBox="0 0 16 16">
+            <path d="M12.96 7H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V7z"/>
+            <path fill-rule="evenodd" d="M10.082 12.629 9.664 14H8.598l1.789-5.332h1.234L13.402 14h-1.12l-.419-1.371h-1.781zm1.57-.785L11 9.688h-.047l-.652 2.156h1.351z"/>
+            <path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z"/>
+          </svg></button>
+          {% endif %}
+        </th>
+        <th>Soyad</th>
+        <th>Tel</th>
+        <th>Foto</th>
+        <th>Email</th>
+        <th>Sirket</th>
+        <th>Tarix </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        
+        {% for cl in clients %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{cl.id}}"></td>
+
+            <td>{{ cl.Ad }}</td>
+            <td>{{ cl.Soyad }}</td>
+            <td>{{ cl.Tel }}</td>
+            <td><img style="width:90px; height:70px;" src="{{ cl.Foto }}"></td>
+            <td>{{ cl.Email }}</td>
+            <td>{{ cl.Sirket }}</td>
+            <td>{{ cl.Tarix }}</td>
+            <td>
+                <button type="button" class="btn btn-warning btn-sm edit" id="{{ cl.id }}"><i class="mdi mdi-grease-pencil"></i></button>
+
+              <button type="button" class="btn btn-danger btn-sm sil" id="{{ cl.id }}"><i class="mdi mdi-delete"></i></button>   
+            </td>
+
+        </tr>
+    </tbody>
+    {% endfor %}
+
+</table>
+    </form>
+</div>
+
+{% endif %}
+
+
+{% if section == 'xercler' %}
+
+{% if edit %}
+<form action="updaterecordxercler/{{ edit.id }}" method="post" id="all_update">
+    {% csrf_token %}
+    <br>
+    <div class="alert alert-info"><h2>Xercler</h2></div>
+    <br>
+    <label for="">Teyinat</label>
+    <input  placeholder="Yeni Teyinat" class="form-control" name="teyinat" value="{{ edit.Teyinat}}">
+    <br>
+    <label for="">Mebleg</label>
+    <input  placeholder="Yeni Mebleg" class="form-control" name="mebleg" value="{{ edit.Mebleg }}">
+    <br>
+    <input type="hidden" name="id" value="{{ edit.id }}">
+    <input type="hidden" name="xercupdate">
+    <button type="button" class="btn btn-success btn-sm update" >Yenile</button>
+    <a href="{% url 'xercler' %}"><button class="btn btn-danger btn-sm" type="button">İmtina</button></a>
+    <br><br>
+</form>
+
+{% else %}
+
+   <h2>Xercler</h2>
+
+    <form action="addxercler/" method="POST" id="brand_insert">
+        {% csrf_token %}
+        <br>
+        <label for="">Teyinat</label>
+        <input type="text" name="teyinat" placeholder="Teyinat" class="form-control">
+        <br>
+        <label for="">Mebleg</label>
+        <input type="text" name="mebleg" placeholder="Mebleg" class="form-control">
+        <input type="hidden" name="xercinsert">
+        <br><br>
+        <button type="button" class="btn btn-success btn-md insert">Daxil et</button>
+        <br>
+    </form>
+{% endif %}
+<br>
+<div id="ajax_message">
+    {% if messages%}
+            {% for message in messages %}
+            <div class="alert alert-info  " role="alert"> {{ message }}</div>
+            {% endfor %}
+    {% endif %}
+    <div class="alert alert-info">Bazada <b>{{bsay}}</b> xerc var</div>
+</div>
+<br>
+<form method="post" action="{% url 'xercler' %}" id="secsil">
+            {% csrf_token %}
+ <div class="table-responsive">
+<table class="table table-hover" id="cedvel">
+    <thead >
+        <tr>
+        <br><br>
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Teyinat</th>
+        <th>Mebleg</th>
+        <th>Tarix</th>
+        <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for xerc in xercler %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+            <td>{{ xerc.Teyinat }}</td>
+            <td>{{ xerc.Mebleg }}</td>
+            <td>{{ xerc.Tarix }}</td>
+            <td>
+
+                <button type="button" class="btn btn-success btn-sm edit" id="{{ xerc.id }}"><i class="mdi mdi-grease-pencil"></i></button>
+
+                 <button type="button" class="btn btn-danger btn-sm sil" id = '{{ xerc.id }}'><i class="mdi mdi-delete"></i></button>
+                 
+            </td>
+        </tr>
+
+    </tbody>
+    {% endfor %}
+
+</table>
+</form>
+</div>
+
+{% endif %}
+
+
+{% if section == 'sifaris' %}
+
+{% if editsifaris %}
+<br>
+<h1 class="alert alert-info">Redakte edin</h1>
+<form action="updatesifaris/{{ editsifaris.id }}" method="post" enctype="multipart/form-data" id="all_update">
+    {% csrf_token %}
+    <label for="">Müştəri</label>
+    <select name="ad_soyad"  class="form-control" >
+        <option value="">Klienti secin</option>
+        {% for myclients in myclients %}
+        {% if editsifaris.Client_id == myclients.Ad  %}
+        <option selected value="{{myclients.id}}">{{myclients.Ad}} {{myclients.Soyad}}</option>
+        {% else %}
+        <option value="{{myclients.id}}">{{myclients.Ad}} {{myclients.Soyad}}</option>
+        {% endif %}
+            
+            
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Məhsul</label>
+    <select name="product" class="form-control" >
+        <option value="">Mehsulu Secin</option>
+        {% for p in mehsul %}
+        <option value="{{p.id}}">{{p.Brand_id}} - {{p.Ad}} {{p.Miqdar}}</option>
+        {% endfor %}
+    </select>
+    <label for=""><h3>Miqdar</h3></label>
+    <input  placeholder="Yeni Miqdar" class="form-control" name="miqdar" value="{{ editsifaris.Miqdar}}">
+    <br>
+    <input type="hidden" name="id" value="{{ editsifaris.id }}">
+    <input type="hidden" name="sifarisupdate">
+    <button  class= 'btn btn-primary btn-md update' type="button">Yenile</button>
+    <a class="btn btn-danger btn-md"  href="/sifaris">Imtina</a>
+</form>
+
+
+{% else %}
+    <h2>Sifariş Verin</h2>
+    <form action="addsifaris/" method="post" id="brand_insert">
+        {% csrf_token %}
+        
+            <label for="">Müştəri</label>
+            <select name="ad_soyad"  class="form-control">
+                <option value="">Klienti secin</option>
+                {% for myclients in myclients %}
+                    <option value="{{myclients.id}}">{{myclients.Ad}} {{myclients.Soyad}}</option>
+                    
+                {% endfor %}
+            </select>
+            <br>
+            <label for="">Məhsul</label>
+            <select name="product" class="form-control">
+                <option value="">Mehsulu Secin</option>
+                {% for p in mehsul %}
+                <option value="{{p.id}}">{{p.Brand_id}} - {{p.Ad}} [{{p.Miqdar}}]</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="">Miqdar</label>
+            <input type="text" name="miqdar" placeholder="Miqdar" class="form-control">
+            <br>
+            <input type="hidden" name="sifarisinsert">
+            <button type="button" class="btn btn-success btn-md insert">Daxil et</button>
+
+
+        
+
+
+    </form>
+{% endif %}
+<br>
+<div id="ajax_message">
+    {% if messages%}
+            {% for message in messages %}
+            <div class="alert alert-info  " role="alert"> {{ message }}</div>
+            {% endfor %}
+    {% endif %}
+    <div class="alert alert-info">Müştəri:<b>{{sayklient}}</b> Sifariş:<b>{{bsay}}</b> Brend: <b>{{saybrend}}</b>
+        Məhsul:<b>{{saymehsul}}</b> Çeşid: <b>{{cesid}}</b> Ümumi məhsul: <b> {{mehsuldepo}}</b> 
+        Alış : <b>{{alisdepo}}</b> Satış <b>{{satisdepo}}</b> Qazanc: <b>{{qazanc}}</b> Cari Qazanc : <b>{{cariqaz}}</b>
+        </div> 
+    <br>
+</div>
+
+<form method="post" action="{% url 'sifaris' %}" id="secsil">
+            {% csrf_token %}
+ <div class="table-responsive">
+<table class="table table-hover" id="cedvel">
+    <thead >
+        <tr>
+          
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Müştəri</th>
+        <th>Brend</th>
+        <th>Məhsul</th>
+        <th>Alış</th>
+        <th>Satış</th>
+        <th>Stok</th>
+        <th>Miqdar</th>
+        <th>Qazanc</th>
+        <th>Tarix</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        
+        {% for order in sifarish %}
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+            <td>{{ order.Client_id.Ad }} {{ order.Client_id.Soyad }}</td>
+            <td>{{ order.Mehsul_id.Brand_id }}</td>
+            <td>{{ order.Mehsul_id.Ad }}</td>
+            <td>{{ order.Mehsul_id.Alish }}</td>
+            <td>{{ order.Mehsul_id.Satish }}</td>
+            <td>{{ order.Mehsul_id.Miqdar}}</td>
+            <td>{{ order.Miqdar }}</td>
+            <td>{{ order.cemsif }}</td>
+            <td>{{ order.Tarix }}</td>
+            <td>
+                
+                
+
+                <form method="post" >
+
+                {% csrf_token %}
+                    <input type="hidden" name="sid" value="{{ order.id }}">
+                    <input type="hidden" name="pid" value="{{ order.Mehsul_id.id }}">
+                    <input type="hidden" name="smiq" value="{{ order.Miqdar }}">
+                    <input type="hidden" name="pmiq" value="{{ order.Mehsul_id.Miqdar }}">
+                {% if order.Tesdiq == 0 %}
+                    
+                    <button type="button" class="btn btn-success btn-sm tesdiq" ><i class="bi bi-check"></i></button>
+                    <button type="button" class="btn btn-warning btn-sm edit" id="{{ order.id }}"><i class="mdi mdi-grease-pencil"></i></button>
+                    <button type="button" class= "btn btn-danger btn-sm sil" id="{{ order.id }}" ><i class="mdi mdi-delete"></i></button>
+
+                {% else  %}
+                    <a class= "btn btn-warning btn-sm" href="legv/{{ order.id }}" ><i class="bi bi-x"></i></a>
+                {% endif %}
+
+                </form>
+
+            </td>
+            
+               
+
+        </tr>
+    </tbody>
+        {% endfor %}
+
+</table>
+</form>
+</div>
+
+{% endif %}
+
+
+
+{% if section == 'staff' %}
+
+{% if editstaff %}
+<form action="http://127.0.0.1:8000/staff/editstaff/updatestaff/{{ editstaff.id }}" method="post" id="all_update">
+    {% csrf_token %}
+
+    <label for="">Ad</label>
+    <input  placeholder="Yeni Teyinat" class="form-control" name="ad" value="{{ editstaff.ad}}">
+    <br>
+    <label for="">Soyad</label>
+    <input  placeholder="Soyad" class="form-control" name="soyad" value="{{ editstaff.soyad }}">
+    <br>
+    <label for="">Telefon</label>
+    <input  placeholder="Telefon" class="form-control" name="telefon" value="{{ editstaff.telefon }}">
+    <br>
+    <label for="">Ev Telefonu</label>
+    <input  placeholder="Ev Telefonu" class="form-control" name="ev_tel" value="{{ editstaff.ev_tel }}">
+    <br>
+    <label for="">Unvan</label>
+    <input  placeholder="Unvan" class="form-control" name="unvan" value="{{ editstaff.unvan }}">
+    <br>
+    <label for="">Email</label>
+    <input  placeholder="Email" class="form-control" name="email" value="{{ editstaff.email }}">
+    <br>
+    <label for="">Vezife</label>
+    <input  placeholder="Vezife" class="form-control" name="vezife" value="{{ editstaff.vezife }}">
+    <br>
+    <input type="hidden" name="id" value="{{ editstaff.id }}">
+    <input type="hidden" name="staffupdate">
+    <button type="button" class="btn btn-success btn-sm update" >Yenile</button>
+    <a class="btn btn-danger btn-sm"  href="/staff">Imtina</a>
+    <br><br>
+</form>
+
+{% else %}
+
+<form action="addstaff/" method="POST" id = 'brand_insert'>
+{% csrf_token %}
+<label for="">Ad</label>
+<input type="text" name="ad" placeholder="Ad" class="form-control">
+<br>
+<label for="">Soyad</label>
+<input type="text" name="soyad" placeholder="Soyad" class="form-control" >
+<br>
+<label for="">Telefon</label>
+<input type="text" name="telefon" placeholder="Telefon" class="form-control" >
+<br>
+<label for="">Ev Telefonu</label>
+<input type="text" name="ev_tel" placeholder="Ev Telefonu" class="form-control" >
+<br>
+<label for="">Unvan</label>
+<input type="text" name="unvan" placeholder="Unvan" class="form-control" >
+<br>
+<label for="">Email</label>
+<input type="text" name="email" placeholder="Email" class="form-control" >
+<br>
+<select name="vezife_id" class="form-control">
+    <option value="">Secin</option>
+    {% for x in shobe %}
+    <optgroup label="{{x.ad}}" value ="{{x.id}}">
+        {% for v in vezife_id %}
+
+            {% if x.id == v.shobe_id %}
+            <option value="{{v.id}}">{{v.ad}}</option>
+            {% endif %}
+            
+        {% endfor %}
+        
+        
+    </optgroup>
+    {% endfor %}
+</select>
+<br>
+<input type="hidden" name="staffinsert">
+<button type="button" class="btn btn-success btn-sm insert" >Daxil et</button>
+
+</form> 
+
+
+{% endif %}
+<br>
+
+<div id="ajax_message">
+    {% if messages%}
+            {% for message in messages %}
+            <div class="alert alert-info  " role="alert"> {{ message }}</div>
+            {% endfor %}
+    {% endif %}
+    <div class="alert alert-info">Bazada <b>{{bsay}}</b> isci var</div>
+</div>
+<br>
+<form method="post" action="{% url 'staff' %}" id="secsil">
+            {% csrf_token %}
+ <div class="table-responsive">
+<table class="table table-hover" id="cedvel">
+
+    <thead >
+        <tr>
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Telefon</th>
+        <th>Ev telefonu</th>
+        <th>Unvan</th>
+        <th>Email</th>
+        <th>Shobe</th>
+        <th>Vezife</th>
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+        {% for st in staff%}
+        <tr> 
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{st.id}}"></td>
+
+            <td>{{ st.ad }}</td>
+            <td>{{ st.soyad }}</td>
+            <td>{{ st.telefon }}</td>
+            <td>{{ st.ev_tel }}</td>
+            <td>{{ st.unvan }}</td>
+            <td>{{ st.email }}</td>
+            <td>{{ st.vezife_id.shobe_id.ad }}</td>
+            <td>{{ st.vezife_id.ad }}</td>
+            <td>
+                <button type="button" class="btn btn-warning btn-sm edit" id="{{ st.id }}"><i class="bi bi-pencil"></i></button>
+                <button type="button" class="btn btn-danger btn-sm sil " id="{{ st.id }}"><i class="bi bi-trash"></i></button>
+                <a class="btn btn-primary btn-sm" href="senedler/{{ st.id }}"><i class="bi bi-card-list"></i></a>
+
+            </td>
+           
+        </tr>
+    </tbody>
+    {% endfor %}
+    
+
+</table>
+</form>
+</div>
+{% endif %}
+
+
+
+{% if section == 'senedler' %}
+
+{% if editsened %}
+
+<form  method="post" enctype="multipart/form-data" id="all_update">
+
+    {% csrf_token %}
+    
+    <label for="">Melumat</label>
+    <select name="isci_id" class="form-control">
+        
+        {% for st in staff %}
+            <option selected value="{{st.id}}">{{st.ad}} {{st.soyad}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Basliq</label>
+    <input type="text" name="basliqs" placeholder="Basliq" class="form-control" size="3" value="{{ editsened.basliq }}">
+    <br>
+    <label for="">Skan</label>
+    <div class="custom-file">
+        
+        <input type="file" name="foto" class="custom-file-input" value="{{ editsened.skan }}">
+        <label class="custom-file-label" for="inputGroupFile01">Fayl Seçin</label>
+    <br>
+    <label for="">Qeyd</label>
+    <input type="text" name="qeyds" placeholder="Qeyd" class="form-control" size="3" value="{{ editsened.qeyd }}">
+    <br>
+    
+    
+    </div>
+    <input type="hidden" name="id" value="{{ editsened.id }}">
+    <input type="hidden" name="update_sened">
+    <button type="button" class="btn btn-success btn-sm update" >Yenile </button>
+    <br><br>
+
+
+
+
+</form>
+
+
+
+{% else %}
+<form action='http://127.0.0.1:8000/staff/senedler/addsenedler/' method="POST" enctype="multipart/form-data" id="brand_insert">
+    {% csrf_token %}
+    
+    <label for="">Melumat</label>
+    <select name="isci_id" class="form-control">
+        
+        {% for st in staff %}
+            <option selected value="{{st.id}}">{{st.ad}} {{st.soyad}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Basliq</label>
+    <input type="text" name="basliqs" placeholder="Basliq" class="form-control" size="3">
+    <br>
+    <label for="">Skan</label>
+    <div class="custom-file">
+        
+        <input type="file" name="foto" class="custom-file-input" id="inputGroupFile01">
+        <label class="custom-file-label" for="inputGroupFile01">Fayl Seçin</label>
+    <br>
+    <label for="">Qeyd</label>
+    <input type="text" name="qeyds" placeholder="Qeyd" class="form-control" size="3">
+    <br>
+    
+    
+    </div>
+    <input type="hidden" name="senedinsert">
+    
+    <button type="button" class="btn btn-success btn-sm insert" >Daxil et</button>
+    <br><br>
+
+</form>
+{% endif %}
+<br>
+<div id="ajax_message">
+    {% if messages%}
+            {% for message in messages %}
+            <div class="alert alert-info  " role="alert"> {{ message }}</div>
+            {% endfor %}
+    {% endif %}
+    <div class="alert alert-info">Bazada <b>{{bsay}}</b> sened var</div>
+</div>
+<br>
+<form method="post" action="{% url 'senedler' 7 %}" id="secsil">
+            {% csrf_token %}
+ <div class="table-responsive">
+<table class="table table-hover" id="cedvel">
+
+    <thead > 
+     <tr>
+         <th>#</th>
+          <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+         <th>Ad-soyad</th>
+         <th>Basliq</th>
+         <th>Skan</th>
+         <th>Qeyd</th>
+         <th></th>
+         
+     </tr>
+     </thead>
+ 
+ 
+ <tbody class="tbody-dark">
+     {% for x in sened_id %}
+     <tr>
+
+         <td>{{ x.forloop.counter }}</td>
+        <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+         <td>{{ x.ishci_id.ad}} {{ x.ishci_id.soyad }}</td>
+         <td>{{ x.basliq }}</td>
+         <td><img style="width:90px; height:70px;" src="{{ x.skan }}"> </td>
+         <td>{{ x.qeyd }}</td>
+         <td>
+            
+
+                 <button type="button " class="btn btn-danger btn-sm sil " id="{{ x.id }}"><i class="bi bi-trash"></i></button>
+            
+                 <button type="button " class="btn btn-warning btn-sm edit " id="{{ x.id }}"><i class="bi bi-pencil"></i></button>
+
+                 <!-- <a class="btn btn-danger btn-sm " href="http://127.0.0.1:8000/staff/senedler/deletesenedler/{{ x.id }}"><i class="bi bi-trash"></i></a> -->
+          
+         </td>
+ 
+         
+     </tr>
+ </tbody> 
+     {% endfor %}
+ 
+ </table>
+ </form>
+ </div>
+
+{% endif %}
+
+{% if section == 'shobe' %}
+
+
+
+<form  method="POST"  id="brand_insert">
+    {% csrf_token %}
+    <label for="">Shobe</label>
+    <input type="text" name="shobe" placeholder="Shobe" class="form-control" size="3">
+    <br><br>
+    <input type="hidden" name="shobe_insert">
+    <button type="button" class="btn btn-success btn-sm insert" >Daxil et</button>
+
+</form>
+
+
+
+<br>
+
+<div id="ajax_message">
+{% if messages%}
+        {% for message in messages %}
+        <div class="alert alert-info  " role="alert"> {{ message }}</div>
+        {% endfor %}
+{% endif %}
+<div class="alert alert-info">Bazada <b>{{bsay}}</b> shobe var</div>
+</div>
+<br>
+
+<table class="table table-hover" id="cedvel">
+
+    <thead >
+        <tr>
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Ad</th>
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+        {% for s in shobe %}
+        <tr> 
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{s.id}}"></td>
+
+            <td>{{ s.ad }}</td>
+           
+            <td>
+                <button type="button" class="btn btn-warning btn-sm edit" id="{{ s.id }}"><i class="bi bi-pencil"></i></button>
+                <button type="button" class="btn btn-danger btn-sm sil " id="{{ s.id }}"><i class="bi bi-trash"></i></button>
+
+            </td>
+           
+        </tr>
+    </tbody>
+    {% endfor %}
+    
+
+</table>
+
+
+
+{% endif %}
+
+
+
+{% if section == 'vezife' %}
+
+
+
+<form  method="POST"  id="brand_insert">
+    {% csrf_token %}
+
+    <select name="shobe_id" class="form-control">
+        <option value="">Secin</option>
+        {% for x in shobe %}
+        <option value="{{ x.id }}">{{ x.ad }}</option>
+        {% endfor %}
+    </select>
+    <label for="">Shobe</label>
+    <input type="text" name="vezife" placeholder="Vezife" class="form-control" size="3">
+    <br><br>
+    <input type="hidden" name="vezife_insert">
+    <button type="button" class="btn btn-success btn-sm insert" >Daxil et</button>
+
+</form>
+
+
+
+<br>
+
+<div id="ajax_message">
+{% if messages%}
+        {% for message in messages %}
+        <div class="alert alert-info  " role="alert"> {{ message }}</div>
+        {% endfor %}
+{% endif %}
+<div class="alert alert-info">Bazada <b>{{bsay}}</b> vezife var</div>
+</div>
+<br>
+
+<table class="table table-hover" id="cedvel">
+
+    <thead >
+        <tr>
+        <th>#</th>
+        <th>
+                
+                {% if bsay != 0  %}
+        
+                    <button href="delete/" type="button" name="sec_sil" class="btn btn-primary btn-sm secsil" id="{{ x }}">Secimleri sil</button>
+
+                {% else %}
+                    <input type="hidden">
+                {% endif %}
+
+            </th>
+        <th>Ad</th>
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+        {% for x in vezife %}
+        <tr> 
+            <td>{{ forloop.counter }}</td>
+            <td><input type="checkbox" name="x[]" value="{{x.id}}"></td>
+
+            <td>{{ x.ad }}</td>
+           
+            <td>
+                <button type="button" class="btn btn-warning btn-sm edit" id="{{ x.id }}"><i class="bi bi-pencil"></i></button>
+                <button type="button" class="btn btn-danger btn-sm sil " id="{{ x.id }}"><i class="bi bi-trash"></i></button>
+
+            </td>
+           
+        </tr>
+    </tbody>
+    {% endfor %}
+    
+
+</table>
+
+
+
+{% endif %}
+
+
+{% if section == 'users' %}
+
+<table>
+
+    <thead>
+    
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th></th>
+    
+    
+    
+        </tr>
+    </thead>
+    
+    <tbody>
+    
+        {% for user in entry_list %}
+        {% if user.is_superuser == 0 %}
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.username}}</td><br>
+            <td>
+    
+                <button type="button" class='btn btn-danger btn-sm sil_id' id="{{ user.id }}" >Sil</button>
+                {% if user.is_active == 1 %}
+    
+                <a class="btn btn-success btn-sm" href="{% url 'block_user' user.id %}"><i class="bi bi-toggle2-off"></i></a>
+    
+                {% else %}
+    
+                <a class="btn btn-warning btn-sm" href="{% url 'active_user' user.id %}"><i class="bi bi-toggle2-on bi-md"></i></a>
+    
+                {% endif %}
+    
+    
+    
+            </td>
+    
+       
+    
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    
+    </table>
+
+{% endif %}
+
+
+
+

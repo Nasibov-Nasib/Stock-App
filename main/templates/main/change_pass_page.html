@@ -1,0 +1,22 @@
+<h2>Salam</h2>
+
+{%  if user %}
+
+
+<form action="change_pass/{{ user.id }}" method="post" >
+    {% csrf_token %}
+    
+    
+    <label for=""><b>Yeni Parol </b> (* Yeni parolu daxil edin )</label>
+    <input   class="form-control" name="passwords" value="{{user.passwords}}" style="height:40px;width: 400px;">
+    <br>
+    <label for=""><b>Yeni Parol </b> (* Yeni  parolu tesdiq edin )</label>
+    <input   class="form-control" name="newpassconf" value="{{user.newpassconf}}" style="height:40px;width: 400px;">
+    <br>
+
+    <button  class= 'btn btn-primary btn-md '  type="submit" value="Submit">Yenile</button>
+    
+    </form>
+   
+    
+{% endif %}

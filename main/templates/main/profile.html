@@ -1,0 +1,89 @@
+
+{% extends 'main/layout2.html' %}
+
+
+{% block content %}
+<br><br>
+<div class="container-fluid ">          
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row ">
+   
+<div class="card" style="width: 500px;">
+        <div class="card-body">
+            <br>
+            {% if messages%}
+        {% for message in messages %}
+        <div class="alert alert-info  " role="alert"> {{ message }}</div>
+        {% endfor %}
+        <br>
+{% endif %}
+
+{%  if editimg %}
+
+<h2>Profil</h2>
+<form action="updateprofile/{{ editimg.id }}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for=""><b>Ad</b></label>
+    <input  class="form-control" name="first_name" value="{{ editimg.first_name }}" style="height:40px;width: 400px;">
+    
+    <label for=""><b>Soyad</b></label>
+    <input   class="form-control" name="last_name" value="{{ editimg.last_name }}" style="height:40px;width: 400px;">
+    
+    <label for=""><b>Username</b></label>
+    <input   class="form-control" name="username" value="{{ editimg.username }}" style="height:40px;width: 400px;">
+    
+    <label for=""><b>Email</b></label>
+    <input   class="form-control" name="email" value="{{ editimg.email }}" style="height:40px;width: 400px;">
+
+    {% for n in img %}
+    <img  style="width:150px; height:130px;" src="{{n.foto}}" alt="">
+    {% endfor %}
+    <label for="">Foto</label>
+    <div class="custom-file">
+        <input type="file" name="foto" class="custom-file-input" id="inputGroupFile01" style="height:40px;width: 400px;">
+        <label class="custom-file-label" for="inputGroupFile01" style="height:40px;width: 400px;">Faylı Seçin</label>
+    </div>
+    <br>
+    <br>
+
+    <label for=""><b>Cari Parol </b> (* Cari parolu daxil edin  )</label>
+    <input  class="form-control" name="password"  style="height:40px;width: 400px;">
+    
+    <label for=""><b>Yeni Parol </b> (* Yeni parolu daxil edin )</label>
+    <input   class="form-control" name="newpass" value="{{ editimg.newpass }}" style="height:40px;width: 400px;">
+    <br>
+    <label for=""><b>Yeni Parol </b> (* Yeni  parolu tesdiq edin )</label>
+    <input   class="form-control" name="newpassconf" value="{{ editimg.newpassconf }}" style="height:40px;width: 400px;">
+    <br>
+    <button  class= 'btn btn-primary btn-md ' onclick="prof()" type="submit" value="Submit">Yenile</button>
+     {% for x in userid %}
+    <a class="btn btn-danger btn-md" href="{% url 'deluserconfirm' x.id %}"> Useri Sil</a>
+    {% endfor %}
+    </div>
+    </form>
+   
+    
+{% endif %}
+   
+{% if deluser %}
+<form action="{% url 'deleteuser' deluser.id %}" method="post">
+    {% csrf_token %}
+
+    <div class="alert alert-info "><b>Istifadecini Silmek istediyinizden eminsinizmi ?</b>
+    <button class="btn btn-success btn-sm" type="submit"><i class="mdi mdi-check"></i></button>
+    <a class="btn btn-danger btn-sm" href="{% url 'profile' %}"><i class="mdi mdi-window-close"></i></a>
+    </div>
+
+</form>
+{% endif %}
+        </div>
+
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>  
+{% endblock %}

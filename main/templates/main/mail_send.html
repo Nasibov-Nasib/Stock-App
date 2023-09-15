@@ -1,0 +1,20 @@
+
+
+<form action="{% url 'mail_send' %}" class="sign__form sign__form--contacts" method="post">
+    {% csrf_token %}
+    <div class="row">
+        
+
+        <div class="col-12 col-xl-6">
+            <div class="sign__group">
+                <input type="text" name="email" class="sign__input" placeholder="Email">
+            </div>
+        </div>
+
+      
+
+        <div class="col-12 col-xl-3">
+            <button type="submit" class="sign__btn">Send</button>
+        </div>
+    </div>
+</form>	

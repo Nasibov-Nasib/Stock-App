@@ -1,0 +1,223 @@
+{% extends 'main/layout2.html' %}
+{% block content %}
+
+<style>
+
+  .todoapp a{
+
+    
+    float: left;
+    
+    
+  }
+
+  .todoapp{
+    height: 60px;
+    width: 1250px;
+  }
+
+</style>
+
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">To Do App</h4>
+               
+                {% for mesaj in messages %}
+    {% if 'danger' in mesaj.tags %}
+        <div class="alert alert-danger" role="alert">{{mesaj}}</div>
+    {% endif %}
+{% endfor %}
+{% for mesaj in messages %}
+    {% if 'primary' in mesaj.tags %}
+        <div class="alert alert-info" role="alert">{{mesaj}}</div>
+    {% endif %}
+{% endfor %}
+{% for mesaj in messages %}
+    {% if 'success' in mesaj.tags %}
+        <div class="alert alert-success" role="alert">{{mesaj}}</div>
+    {% endif %}
+{% endfor %}
+{% for mesaj in messages %}
+    {% if 'warning' in mesaj.tags %}
+        <div class="alert alert-warning" role="alert">{{mesaj}}</div>
+    {% endif %}
+{% endfor %}
+                {% if sil_id %}
+<a href="{% url 'sil' sil_id %}"><button class="btn btn-success"><i class="bi bi-check"></i></button></a>
+<a href="{% url 'todoapp' %}"><button class="btn btn-danger" type="button"><i class="bi bi-x"></i></button></a><br>
+<br>    
+{% endif %}
+                {% if edit %}
+                <form class="forms-sample" method="post" action="{% url 'updateapp' edit.id %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="exampleInputName1">Tapsiriq</label>
+                    <input type="text" class="form-control" id="exampleInputName1" name="tapsiriq" placeholder="Name" value="{{edit.tapsiriq}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail3">Tarix</label>
+                    <input type="date" class="form-control" id="exampleInputEmail3" name="tarix" placeholder="Email" value="{{edit.tarix1}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword4">Saat</label>
+                    <input type="time" class="form-control" id="exampleInputPassword4" name="saat" placeholder="Password" value="{{edit.saat}}">
+                  </div>
+                  
+                  <button type="sumbit" name="l" class="btn btn-success"><i class="bi bi-check"></i></button>
+                  <a href="{% url 'todoapp' %}"><button class="btn btn-danger" type="button"><i class="bi bi-x"></i></button></a><br><br> 
+                </form>
+                {% else %}
+                <form class="forms-sample" method="post" action="{% url 'todoapp' %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="exampleInputName1">Tapsiriq</label>
+                    <input type="text" class="form-control" id="exampleInputName1" name="tapsiriq" placeholder="Name" >
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail3">Tarix</label>
+                    <input type="date" class="form-control" id="exampleInputEmail3" name="tarix" placeholder="Email" >
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword4">Saat</label>
+                    <input type="time" class="form-control" id="exampleInputPassword4" name="saat" placeholder="Password" >
+                  </div>
+                  
+                  <button name="l" class="btn btn-success btn-sm">Daxil et</button>     
+                  <a href="{% url 'excel' %}"><button class="btn btn-primary btn-sm">Excel</button></a>
+
+                </form>
+                {% endif %}
+<br>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 grid-margin stretch-card">
+          <div class="alert alert-primary todoapp" role="alert">    <a class="nav-link active" aria-current="page" href="{% url 'todoapp' %}#cedvel">Tapsiriq   {{say}} | </a>
+            <a class="nav-link active" aria-current="page" href="{% url 'secim' 1 %}#cedvel">Aktiv tapsiriq {{say1}} |</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'secim' 2 %}">Bitmish {{say2}}</a>
+           </div>
+          </div>
+           
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                
+                <div class="table-responsive">
+                  <table class="table table-striped" id="cedvel">
+                    
+                    <thead>
+                      <tr>
+                            <th>#</th>
+                            <th>Tapsiriq</th>
+                            <th>Tarix</th>
+                            <th>Saat</th>
+                            <th>B.Tarix</th>
+                            <th>Qalan vaxt</th>
+                            <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        
+                        {% for x in info %}
+
+
+                        {% if filter %}
+                            {% if filter == 1 %}
+                    
+                                {% if x.qalanvaxt != 0 %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{x.tapsiriq}}</td>
+                                        <td>{{x.tarix}}</td>
+                                        <td>{{x.saat}}</td>
+                                        <td>{{x.tarix}} {{x.saat}}</td>
+                                        {% if x.qalanvaxt == 0 %}
+                                        <td><button class="btn btn-success"><i class="bi bi-check"></i></button></td>
+                                        {% else %}
+                                        <td>{{x.qalanvaxt}}</td>
+                                        {% endif %}
+                                        <td>
+                                        <a href="{% url 'deleteapp' x.id %}"><button class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button></a>
+                                        <a href="{% url 'editapp' x.id %}"><button class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></button></a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                    
+                    
+                            {% if filter == 2 %}
+                    
+                                {% if x.qalanvaxt < 1 %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{x.tapsiriq}}</td>
+                                        <td>{{x.tarix}}</td>
+                                        <td>{{x.saat}}</td>
+                                        <td>{{x.tarix}} {{x.saat}}</td>
+                                        {% if x.qalanvaxt == 0 %}
+                                        <td><button class="btn btn-success"><i class="bi bi-check"></i></button></td>
+                                        {% else %}
+                                        <td>{{x.qalanvaxt}}</td>
+                                        {% endif %}
+                                        <td>
+                                        <a href="{% url 'deleteapp' x.id %}"><button class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button></a>
+                                        <a href="{% url 'editapp' x.id %}"><button class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></button></a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                    
+                            {% else %}
+                    
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{x.tapsiriq}}</td>
+                                <td>{{x.tarix}}</td>
+                                <td>{{x.saat}}</td>
+                                <td>{{x.tarix}} {{x.saat}}</td>
+                                {% if x.qalanvaxt == 0 %}
+                                <td><button class="btn btn-success"><i class="bi bi-check"></i></button></td>
+                                {% else %}
+                                <td>{{x.qalanvaxt}}</td>
+                                {% endif %}
+                                <td>
+                                <a href="{% url 'deleteapp' x.id %}"><button class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button></a>
+                                <a href="{% url 'editapp' x.id %}"><button class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></button></a>
+                                </td>
+                            </tr>
+                    
+                            {% endif %}
+                    
+                    
+                    
+                            
+                        {% endfor %}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+       
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>   
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+{% endblock %}
+
